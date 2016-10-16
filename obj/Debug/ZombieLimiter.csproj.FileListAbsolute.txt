@@ -1,0 +1,10 @@
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\ZombieLimiter.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\ZombieLimiter.pdb
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\Assembly-CSharp.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\Rocket.API.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\Rocket.Core.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\Rocket.Unturned.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\UnityEngine.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\obj\Debug\ZombieLimiter.dll
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\obj\Debug\ZombieLimiter.pdb
