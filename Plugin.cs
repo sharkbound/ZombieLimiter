@@ -52,32 +52,40 @@ namespace ZombieLimiter
             int randomValue = 0;
             bool DidAClear = false;
 
-            while (true)
+            try
             {
-                if (ZombieManager.tickingZombies.Count > GetAllowedZombies())
+                while (true)
                 {
-                    Logger.LogWarning("Starting to kill zombies, current zombie count: " + ZombieManager.tickingZombies.Count.ToString());
-
-                    while (ZombieManager.tickingZombies.Count > GetAllowedZombies())
+                    if (ZombieManager.tickingZombies.Count > GetAllowedZombies())
                     {
-                        randomValue = rand.Next(ZombieManager.tickingZombies.Count);
-                        Zombie zom = ZombieManager.tickingZombies[randomValue];
+                        Logger.LogWarning("Starting to kill zombies, current zombie count: " + ZombieManager.tickingZombies.Count.ToString());
 
-                        ZombieManager.sendZombieDead(zom, UnityEngine.Vector3.zero);
+                        while (ZombieManager.tickingZombies.Count > GetAllowedZombies())
+                        {
+                            randomValue = rand.Next(ZombieManager.tickingZombies.Count);
+                            Zombie zom = ZombieManager.tickingZombies[randomValue];
 
-                        Thread.Sleep(GetSleepTimeZombie());
+                            ZombieManager.sendZombieDead(zom, UnityEngine.Vector3.zero);
+
+                            Thread.Sleep(GetSleepTimeZombie());
+                        }
+
+                        DidAClear = true;
                     }
 
-                    DidAClear = true;
-                }
+                    if (DidAClear)
+                    {
+                        Logger.LogWarning("Finished a zombie clear!");
+                        DidAClear = false;
+                    }
 
-                if (DidAClear)
-                {
-                    Logger.LogWarning("Finished a zombie clear!");
-                    DidAClear = false;
+                    Thread.Sleep(GetSleepTimeNoClear());
                 }
-
-                Thread.Sleep(GetSleepTimeNoClear());
+            }
+            catch
+            {
+                Logger.LogWarning("The thread has had a error or crashed! Restarting the thread!");
+                StartThreadDelayed(5000);
             }
         }
 
