@@ -9,16 +9,16 @@ namespace ZombieLimiter
     public class Config : IRocketPluginConfiguration
     {
         public bool Enabled;
-        public int SleepTimeZombie;
-        public int SleepTimeNoClear;
+        public bool LogKills;
+        public int SecondsBetweenZombieClears;
         public int MaxZombiesAllowed;
 
         public void LoadDefaults()
         {
             Enabled = true;
-            SleepTimeZombie = 1500;
-            SleepTimeNoClear = 3000;
-            MaxZombiesAllowed = 25;
+            LogKills = true;
+            SecondsBetweenZombieClears = 5;
+            MaxZombiesAllowed = 15;
         }
     }
 }

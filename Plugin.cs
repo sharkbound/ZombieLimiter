@@ -17,76 +17,52 @@ namespace ZombieLimiter
         public static Plugin Instance;
         public static Thread thread;
 
+        bool ClearsEnabled = true;
+
+        DateTime LastClear = DateTime.Now;
+
         protected override void Load()
         {
             Instance = this;
             Logger.Log("ZombieLimiter has loaded!");
-            new Thread(() => StartThreadDelayed(10000)).Start();
+            ClearsEnabled = true;
         }
 
         protected override void Unload()
         {
             Logger.Log("ZombieLimiter has Unloaded!");
-            StopThread();
+            ClearsEnabled = false;
         }
 
-        public void StartThreadDelayed(int delay)
+        public void Update()
         {
-            Thread.Sleep(delay);
-            thread = new Thread(() => KillZombiesThread());
-            thread.Start();
-        }
-
-        public void StopThread()
-        {
-            if (thread != null)
+            if (ClearsEnabled)
             {
-                thread.Abort();
-                thread = null;
+                KillZombies();
             }
         }
 
-        void KillZombiesThread()
+        Random rand = new Random();
+        int randomValue = 0;
+        void KillZombies()
         {
-            Random rand = new Random();
-            int randomValue = 0;
-            bool DidAClear = false;
-
             try
             {
-                while (true)
+                if (ZombieManager.tickingZombies.Count > GetAllowedZombies())
                 {
-                    if (ZombieManager.tickingZombies.Count > GetAllowedZombies())
+                    randomValue = rand.Next(ZombieManager.tickingZombies.Count);
+                    Zombie zom = ZombieManager.tickingZombies[randomValue];
+
+                    ZombieManager.sendZombieDead(zom, UnityEngine.Vector3.zero);
+                    //zom.tellDead(UnityEngine.Vector3.zero);
+
+                    if (Configuration.Instance.LogKills)
                     {
-                        Logger.LogWarning("Starting to kill zombies, current zombie count: " + ZombieManager.tickingZombies.Count.ToString());
-
-                        while (ZombieManager.tickingZombies.Count > GetAllowedZombies())
-                        {
-                            randomValue = rand.Next(ZombieManager.tickingZombies.Count);
-                            Zombie zom = ZombieManager.tickingZombies[randomValue];
-
-                            ZombieManager.sendZombieDead(zom, UnityEngine.Vector3.zero);
-
-                            Thread.Sleep(GetSleepTimeZombie());
-                        }
-
-                        DidAClear = true;
+                        Logger.Log("Killed a zombie, current ticked zombie count: " + ZombieManager.tickingZombies.Count);
                     }
-
-                    if (DidAClear)
-                    {
-                        Logger.LogWarning("Finished a zombie clear!");
-                        DidAClear = false;
-                    }
-
-                    Thread.Sleep(GetSleepTimeNoClear());
-                }
+                } 
             }
-            catch
-            {
-                Logger.LogWarning("The thread has had a error or crashed! Restarting the thread!");
-                StartThreadDelayed(5000);
-            }
+            catch { }
         }
 
         int GetAllowedZombies()
@@ -94,51 +70,29 @@ namespace ZombieLimiter
             return Configuration.Instance.MaxZombiesAllowed;
         }
 
-        int GetSleepTimeZombie()
+        int GetTimeBetweenClears()
         {
-            return Configuration.Instance.SleepTimeZombie;
-        }
-
-        int GetSleepTimeNoClear()
-        {
-            return Configuration.Instance.SleepTimeNoClear;
+            return Configuration.Instance.SecondsBetweenZombieClears;
         }
 
         [RocketCommand("zstop", "", "", Rocket.API.AllowedCaller.Both)]
         public void CommandStopThread(IRocketPlayer caller, string[] parameters)
         {
-            if (thread == null)
-            {
-                sendMsg(caller, "Zombie clearing thread isnt running currently!");
-                return;
-            }
-
-            thread.Abort();
-            thread = null;
-
-            sendMsg(caller, "Stopped the zombie clearing thread!");
+            ClearsEnabled = false;
+            sendMsg(caller, "Disabled Clears!");
         }
 
         [RocketCommand("zstart", "", "", Rocket.API.AllowedCaller.Both)]
         public void CommandStartThread(IRocketPlayer caller, string[] parameters)
         {
-
-            if (thread != null)
-            {
-                sendMsg(caller, "Zombie clearing thread is already running!");
-                return;
-            }
-
-            thread = new Thread(() => KillZombiesThread());
-            thread.Start();
-
-            sendMsg(caller, "Started the zombie clearing thread!");
+            ClearsEnabled = true;
+            sendMsg(caller, "Enabled Clears!");
         }
 
         [RocketCommand("zlist", "", "", Rocket.API.AllowedCaller.Both)]
         public void CommandZList(IRocketPlayer caller, string[] parameters)
         {
-            sendMsg(caller, "Current zombies: " + ZombieManager.tickingZombies.Count.ToString());
+            sendMsg(caller, "Current Ticked zombies: " + ZombieManager.tickingZombies.Count.ToString());
         }
 
         void sendMsg(IRocketPlayer caller, string msg)
