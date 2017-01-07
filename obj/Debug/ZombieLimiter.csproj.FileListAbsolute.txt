@@ -8,3 +8,4 @@ C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\D
 C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\bin\Debug\UnityEngine.dll
 C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\obj\Debug\ZombieLimiter.dll
 C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\obj\Debug\ZombieLimiter.pdb
+C:\Users\owner\Desktop\GitHub\RocketModPlugins\ZombieLimiter\ZombieLimiter\obj\Debug\ZombieLimiter.csprojResolveAssemblyReference.cache
